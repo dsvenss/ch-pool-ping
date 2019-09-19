@@ -1,0 +1,9 @@
+*.iml
+
+*.idea
+
+venv
+
+testData
+
+**/__pycache__/**
