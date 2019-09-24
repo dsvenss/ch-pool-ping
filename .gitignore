@@ -8,3 +8,5 @@ venv
 testData
 
 **/__pycache__/**
+
+**/*.jpg
