@@ -1,6 +1,6 @@
-from ImageComparator import ImageComparator
-from ImageHandler import ImageHandler
-from PoolTableFinder import PoolTableFinder
+from image.ImageComparator import ImageComparator
+from image.ImageHandler import ImageHandler
+from pool.PoolTableFinder import PoolTableFinder
 
 class PoolTableChecker:
 

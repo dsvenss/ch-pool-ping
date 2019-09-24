@@ -2,6 +2,7 @@ import yaml
 
 mattermostConfig = None
 
+
 def getMattermostConfig():
     global mattermostConfig
     if not mattermostConfig:
