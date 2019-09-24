@@ -6,18 +6,26 @@ import ssl
 import json
 import ConfigHandler
 import time
-from datetime import datetime 
+from datetime import datetime
+import re
 
 mattermostConfig = ConfigHandler.getMattermostConfig()
 
 mattermostHookUrl = mattermostConfig['webhook']
-iconUrl = "http://icons.iconarchive.com/icons/google/noto-emoji-activities/256/52758-pool-8-ball-icon.png"
+user = mattermostConfig['user']
+password = mattermostConfig['password']
 mattermostApiUrl = mattermostConfig['api']
+mattermostCommandChannel=mattermostConfig['commandChannel']
+
+headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+
+iconUrl = "http://icons.iconarchive.com/icons/google/noto-emoji-activities/256/52758-pool-8-ball-icon.png"
 
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+
 token = None
 
-latestCommand=None
+latestEntry=None
 
 
 def getPayloadBody(message):
@@ -28,44 +36,57 @@ def getPayloadBody(message):
         'icon_url': iconUrl
         }
 
-headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-
 def updateMattermostAvailable(available):
     state = "LEDIGT" if available == True else "UPPTAGET"
     body = getPayloadBody(state)
     response = requests.post(mattermostHookUrl, data=json.dumps(body), headers=headers)
     
-def readLatestCommand():
+def readLatestEntry():
+    global mattermostCommandChannel
+    
     headers = {'Authorization': 'Bearer '+ token }
-    return requests.get(mattermostApiUrl + '/channels/1awbmkoaebgg7rq9osdpiowdrw/posts?per_page=1',  headers=headers).json()
+    return requests.get(mattermostApiUrl + '/channels/'+mattermostCommandChannel+'/posts?per_page=1',  headers=headers).json()
 
 
-def parseCommand():
-    command = None
-    postId = None
-    post = None
+def getCommand():
+    global latestEntry
     cmd = None
-    global latestCommand
         
-    command = readLatestCommand()
+    entry = readLatestEntry()
       
-    postId = command['order'][0]
+    postId = entry['order'][0]
     print('postID ' + str(postId))
 
-    if not latestCommand or latestCommand['id'] != postId
-        post = command['posts'][postId]   
-        cmd = post['message']
+    if not latestEntry or latestEntry['id'] != postId:
+        post = entry['posts'][postId]   
+        cmd = parseCommand(post['message'])
     
-    latestCommand = command
+    latestEntry = entry
     return cmd
     
-def getMMToken():
+def parseCommand(cmd):
+    if cmd.startswith('_'):
+        actualCommand = {}
+        params = cmd.split(',')
+        actualCommand['command'] = params[0].replace('_','')
+        params = params[1:]
+        for x in params:
+            p = x.split('=')
+            actualCommand[p[0]] = p[1]
+        return actualCommand
+    
+    return None
+    
+
+def getToken():
     global token
+    global user
+    global password
     if not token:
-        response = requests.post(mattermostApiUrl + "/users/login",data=json.dumps({'login_id' : mattermostConfig['user'], 'password':mattermostConfig['password']}))
+        response = requests.post(mattermostApiUrl + "/users/login",data=json.dumps({'login_id' : user, 'password': password}))
 
     token = response.headers['Token']
     
 getMMToken()
-cmd = parseCommand()
-print(str(cmd))
+cmd = getCommand()
+print(cmd)
