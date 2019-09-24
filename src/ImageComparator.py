@@ -1,13 +1,13 @@
 
 from skimage.measure import compare_ssim
 import cv2 as cv
+import CommandHandler
 
-class ImageComparator:
-
-    def __init__(self, equalityThreshold):
-        self.equalityThreshold = equalityThreshold
+class ImageComparator:        
 
     def areImagesEqual(self, imageA, imageB):
+        self.equalityThreshold = CommandHandler.getSensitivity()
+        
         grayA = self.getGrayscale(imageA)
         grayB = self.getGrayscale(imageB)
 

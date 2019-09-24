@@ -48,34 +48,37 @@ def readLatestEntry():
     return requests.get(mattermostApiUrl + '/channels/'+mattermostCommandChannel+'/posts?per_page=1',  headers=headers).json()
 
 
-def getCommand():
+def getCommands():
     global latestEntry
-    cmd = None
+    cmds = []
         
     entry = readLatestEntry()
       
     postId = entry['order'][0]
     print('postID ' + str(postId))
-
+    print(latestEntry)
     if not latestEntry or latestEntry['id'] != postId:
         post = entry['posts'][postId]   
-        cmd = parseCommand(post['message'])
+        cmds = parseCommands(post['message'])
+        latestEntry = entry['posts'][postId]
     
-    latestEntry = entry
-    return cmd
+    return cmds
     
-def parseCommand(cmd):
-    if cmd.startswith('_'):
-        actualCommand = {}
-        params = cmd.split(',')
-        actualCommand['command'] = params[0].replace('_','')
-        params = params[1:]
-        for x in params:
-            p = x.split('=')
-            actualCommand[p[0]] = p[1]
-        return actualCommand
+def parseCommands(cmd):
+    commandList = []
+    commands = cmd.splitlines()
+    for command in commands:
+        if command.startswith('_'):
+            actualCommand = {}
+            params = command.split(',')
+            actualCommand['command'] = params[0].replace('_','')
+            params = params[1:]
+            for x in params:
+                p = x.split('=')
+                actualCommand[p[0]] = p[1]
+            commandList.append(actualCommand)
     
-    return None
+    return commandList
     
 
 def getToken():
@@ -87,6 +90,4 @@ def getToken():
 
     token = response.headers['Token']
     
-getMMToken()
-cmd = getCommand()
-print(cmd)
+getToken()

@@ -1,5 +1,6 @@
 from PoolTableChecker import PoolTableChecker
 import mattermost_client
+import CommandHandler
 import camera
 import time
 from pathlib import Path
@@ -34,5 +35,6 @@ def checkAvailability():
     currentImage.rename("old.jpg")
 
 while True:
+    CommandHandler.updateSettings()
     checkAvailability()
     time.sleep(INTERVALL_TIME_SECONDS)

@@ -6,7 +6,7 @@ class PoolTableChecker:
 
     def __init__(self):
         self.tableFinder = PoolTableFinder()
-        self.imageComparator = ImageComparator(0.02)
+        self.imageComparator = ImageComparator()
         self.imageHandler = ImageHandler()
 
     def isTableFree(self, imagePathA, imagePathB):
