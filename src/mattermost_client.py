@@ -44,6 +44,7 @@ def getHeaders():
     return {'Authorization': 'Bearer '+ token }
 
 def updateMattermostAvailable(available):
+    Util.log('Posting availability: ', str(available))
     state = "LEDIGT" if available == True else "UPPTAGET"
     data = getPayloadBody(state)
     response = requests.post(mattermostHookUrl, json=data, headers=headers)

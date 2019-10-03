@@ -16,7 +16,6 @@ def checkAvailability():
     global wasAvailable
     global pooltableChecker
     isAvailable = True
-    camera.takePicture()
     
     currentImage = Path(CURRENT_IMAGE)
     oldImage = Path(OLD_IMAGE)
@@ -27,7 +26,6 @@ def checkAvailability():
         except Exception as e:
             Util.log(str(e))
     if isAvailable != wasAvailable:
-        Util.log('Printing availability: ', str(isAvailable))
         mattermost_client.updateMattermostAvailable(isAvailable)
     
     wasAvailable = isAvailable
@@ -35,6 +33,10 @@ def checkAvailability():
     currentImage.rename("old.jpg")
 
 while True:
-    CommandHandler.updateSettings()
-    checkAvailability()
+    try:
+        camera.takePicture()
+        CommandHandler.updateSettings()
+        checkAvailability()
+    except Exception as e:
+        Util.log(str(e))
     time.sleep(CommandHandler.getInterval())
