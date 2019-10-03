@@ -1,13 +1,15 @@
 import mattermost_client
 
-thGreenLow = [30,100,100]
-thGreenHigh = [90,255,255]
+thGreenLow = [35,100,100]
+thGreenHigh = [86,255,255]
 sensitivity = 0.02
 interval = 3
 
 def updateSettings():
     global thGreenLow
     global thGreenHigh
+    global sensitivity
+    global interval
     
     commands = mattermost_client.getCommands()
     print(commands)
