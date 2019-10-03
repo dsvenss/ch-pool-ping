@@ -9,8 +9,11 @@ def getMattermostConfig():
         mattermostConfig = yaml.load(rawConfig, Loader=yaml.FullLoader)
     return mattermostConfig
 
-def getCurrentImagePath:
+def getCurrentImagePath():
     return 'current.jpg'
 
-def getOldImagePath:
+def getOldImagePath():
     return 'old.jpg'
+
+def getLogPath():
+    return 'pool-ping.log'

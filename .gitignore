@@ -12,3 +12,5 @@ testData
 **/*.jpg
 
 **/*.pyc
+
+**/*.log

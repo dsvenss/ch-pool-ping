@@ -1,10 +1,11 @@
 from PoolTableChecker import PoolTableChecker
 import mattermost_client
 import CommandHandler
+import ConfigHandler
 import camera
 import time
 from pathlib import Path
-import Util
+import Logger
 
 wasAvailable = False
 pooltableChecker = PoolTableChecker()
@@ -19,12 +20,12 @@ def checkAvailability():
     currentImage = Path(currentImagePath)
     oldImage = Path(oldImagePath)
     
-    Util.log("Comparing images")
+    Logger.info("Comparing images")
     if oldImage.is_file():
         try:
             isAvailable = pooltableChecker.isTableFree(currentImagePath, oldImagePath)
         except Exception as e:
-            Util.log(str(e))
+            Util.exception(e)
     
     if isAvailable != wasAvailable:
         mattermost_client.updateMattermostAvailable(isAvailable)
@@ -36,8 +37,8 @@ def checkAvailability():
 while True:
     try:
         camera.takePicture()
-        CommandHandler.updateSettings()
+        CommandHandler.reactToCommands()
         checkAvailability()
     except Exception as e:
-        Util.log(str(e))
+        Logger.exception(e)
     time.sleep(CommandHandler.getInterval())

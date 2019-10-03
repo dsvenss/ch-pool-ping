@@ -9,7 +9,7 @@ import time
 from datetime import datetime
 import re
 import socket
-import Util
+import Logger
 
 mattermostConfig = ConfigHandler.getMattermostConfig()
 
@@ -40,19 +40,17 @@ def getPayloadBody(message):
         }
 
 def getHeaders():
-    global token
+    token = getToken()
     return {'Authorization': 'Bearer '+ token }
 
 def updateMattermostAvailable(available):
-    Util.log('Posting availability: ', str(available))
+    Logger.info('Posting availability: ' + str(available))
     state = "LEDIGT" if available == True else "UPPTAGET"
     data = getPayloadBody(state)
     response = requests.post(mattermostHookUrl, json=data, headers=headers)
     
 def readLatestEntry():
-    global mattermostCommandChannel
-    token = getToken()
-    
+    global mattermostCommandChannel    
     headers = getHeaders()
     return requests.get(mattermostApiUrl + '/channels/'+mattermostCommandChannel+'/posts?per_page=1',  headers=headers).json()
 
@@ -64,7 +62,7 @@ def getCommands():
     entry = readLatestEntry()
       
     postId = entry['order'][0]
-    Util.log("Getting commands")
+    Logger.info("Getting commands")
     if not latestEntry or latestEntry['id'] != postId:
         post = entry['posts'][postId]   
         cmds = parseCommands(post['message'])
@@ -90,17 +88,15 @@ def parseCommands(cmd):
     
     
 def postImage():
-    token = getToken()
     response = uploadImage()
     imageId = getImageId(response)
     
-    Util.log("Posting image")
+    Logger.info("Posting image")
     headers = getHeaders()
     data = {'channel_id' : mattermostCommandChannel, 'message' : 'Pool table image', 'file_ids': [imageId]}
     requests.post(mattermostApiUrl + "/posts", json=data, headers=headers)
     
 def postIP():
-    token = getToken()
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(('8.8.8.8', 1))  # connect() for UDP doesn't send packets
     ip = s.getsockname()[0]
@@ -108,22 +104,28 @@ def postIP():
     headers = getHeaders()
     data = {'channel_id' : mattermostCommandChannel, 'message' : ip}
     
-    Util.log("Posting IP")
+    Logger.info("Posting IP")
     response = requests.post(mattermostApiUrl + "/posts", json=data, headers=headers)
-    print(response.content)
+    
+def postLog():
+    headers = getHeaders()
+    log = Logger.getLog()
+    Logger.info("Posting log")
+    data = {'channel_id' : mattermostCommandChannel, 'message' : log}
+    response = requests.post(mattermostApiUrl + "/posts", json=data, headers=headers)
     
 def getImageId(response):
     return response['file_infos'][0]['id']
     
 def uploadImage():
-    token = getToken()
-    
     headers = getHeaders()
+    
+    Logger.info("Uploading image")
+    
     f = open('current.jpg', 'rb')
     formData = {'files': f, 'channel_id' : (None, mattermostCommandChannel)}
     response = requests.post(mattermostApiUrl + "/files", files=formData, headers=headers)
     
-    Util.log("Uploading image")
     return response.json()
 
 def getToken():
@@ -132,7 +134,7 @@ def getToken():
     global password
     if not token:
         data = {'login_id' : user, 'password': password}
-        Util.log("Getting token")
+        Logger.info("Getting token")
         response = requests.post(mattermostApiUrl + "/users/login",json=data)
         token = response.headers['Token']
     
