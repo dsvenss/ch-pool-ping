@@ -8,3 +8,9 @@ def getMattermostConfig():
         rawConfig = open("../mattermostConfig.yml", "r")
         mattermostConfig = yaml.load(rawConfig, Loader=yaml.FullLoader)
     return mattermostConfig
+
+def getCurrentImagePath:
+    return 'current.jpg'
+
+def getOldImagePath:
+    return 'old.jpg'
