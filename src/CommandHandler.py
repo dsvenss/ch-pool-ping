@@ -3,6 +3,7 @@ import mattermost_client
 thGreenLow = [30,100,100]
 thGreenHigh = [90,255,255]
 sensitivity = 0.02
+interval = 3
 
 def updateSettings():
     global thGreenLow
@@ -22,6 +23,12 @@ def updateSettings():
             thGreenHigh[2] = cmd['b']
         elif command == 'sensitivity':
             sensitivity = cmd['value']
+        elif command == 'getImage':
+            mattermost_client.postImage()
+        elif command == 'getIp':
+            mattermost_client.postIP()
+        elif command == 'updateInterval':
+            interval = int(cmd['value'])
     
 def getThGreenLow():
     global thGreenLow
@@ -34,6 +41,10 @@ def getThGreenHigh():
 def getSensitivity():
     global sensitivity
     return sensitivity
+
+def getInterval():
+    global interval
+    return interval
 
 
 updateSettings()
