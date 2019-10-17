@@ -1,17 +1,20 @@
-
 from skimage.measure import compare_ssim
 import cv2 as cv
 import CommandHandler
+import Logger
+from ScoreKeeper import ScoreKeeper
 
-class ImageComparator:        
+class ImageComparator:
 
-    def areImagesEqual(self, imageA, imageB):
+    def areImagesEqual(self, imageA, imageB):   
         self.equalityThreshold = CommandHandler.getSensitivity()
         
         grayA = self.getGrayscale(imageA)
         grayB = self.getGrayscale(imageB)
 
         score = self.calculateEqualityScore(grayA, grayB)
+        ScoreKeeper.score = score
+        
         return score > (1-self.equalityThreshold)
 
     def getGrayscale(self, image):

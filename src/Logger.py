@@ -13,9 +13,11 @@ def info(msg):
     logger.info(msg)
     
 def error(msg):
+    print(msg)
     logger.error(msg)
 
 def exception(e):
+    print(e)
     logger.error(str(e))
     
 def getLog():

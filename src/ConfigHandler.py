@@ -17,3 +17,6 @@ def getOldImagePath():
 
 def getLogPath():
     return 'pool-ping.log'
+
+def getCroppedImagePath():
+    return 'croppedImage.jpg'

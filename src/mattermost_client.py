@@ -11,6 +11,9 @@ import re
 import socket
 import Logger
 
+from ScoreKeeper import ScoreKeeper
+from PoolTableFinder import PoolTableFinder
+
 mattermostConfig = ConfigHandler.getMattermostConfig()
 
 mattermostHookUrl = mattermostConfig['webhook']
@@ -54,7 +57,6 @@ def readLatestEntry():
     headers = getHeaders()
     return requests.get(mattermostApiUrl + '/channels/'+mattermostCommandChannel+'/posts?per_page=1',  headers=headers).json()
 
-
 def getCommands():
     global latestEntry
     cmds = []
@@ -87,42 +89,58 @@ def parseCommands(cmd):
     return commandList
     
     
-def postImage():
-    response = uploadImage()
+def postCroppedImage():
+    
+    poolFinder = PoolTableFinder()
+    poolFinder.saveCroppedImage()
+    
+    postImage(ConfigHandler.getCroppedImagePath())
+
+def postRawImage():
+    postImage(ConfigHandler.getCurrentImagePath())
+
+def postImage(path):
+    response = uploadImage(path)
     imageId = getImageId(response)
     
     Logger.info("Posting image")
     headers = getHeaders()
     data = {'channel_id' : mattermostCommandChannel, 'message' : 'Pool table image', 'file_ids': [imageId]}
     requests.post(mattermostApiUrl + "/posts", json=data, headers=headers)
-    
+
 def postIP():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(('8.8.8.8', 1))  # connect() for UDP doesn't send packets
     ip = s.getsockname()[0]
     
-    headers = getHeaders()
-    data = {'channel_id' : mattermostCommandChannel, 'message' : ip}
-    
     Logger.info("Posting IP")
+    post(ip)
+    
+def postScore():
+    score = str(ScoreKeeper.score)
+    Logger.info("Posting score: " + score)
+    post(score)
+    
+def post(msg):
+    headers = getHeaders()
+    data = {'channel_id' : mattermostCommandChannel, 'message' : msg}
+
     response = requests.post(mattermostApiUrl + "/posts", json=data, headers=headers)
     
 def postLog():
-    headers = getHeaders()
     log = Logger.getLog()
     Logger.info("Posting log")
-    data = {'channel_id' : mattermostCommandChannel, 'message' : log}
-    response = requests.post(mattermostApiUrl + "/posts", json=data, headers=headers)
+    post(log)
     
 def getImageId(response):
     return response['file_infos'][0]['id']
     
-def uploadImage():
+def uploadImage(path):
     headers = getHeaders()
     
     Logger.info("Uploading image")
-    
-    f = open('current.jpg', 'rb')
+        
+    f = open(path, 'rb')
     formData = {'files': f, 'channel_id' : (None, mattermostCommandChannel)}
     response = requests.post(mattermostApiUrl + "/files", files=formData, headers=headers)
     

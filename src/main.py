@@ -6,6 +6,7 @@ import camera
 import time
 from pathlib import Path
 import Logger
+from ScoreKeeper import ScoreKeeper
 
 wasAvailable = False
 pooltableChecker = PoolTableChecker()
@@ -19,13 +20,15 @@ def checkAvailability():
     
     currentImage = Path(currentImagePath)
     oldImage = Path(oldImagePath)
-    
+
     Logger.info("Comparing images")
+    
     if oldImage.is_file():
         try:
             isAvailable = pooltableChecker.isTableFree(currentImagePath, oldImagePath)
         except Exception as e:
-            Util.exception(e)
+            isAvailable = None
+            Logger.exception(e)
     
     if isAvailable != wasAvailable:
         mattermost_client.updateMattermostAvailable(isAvailable)

@@ -1,9 +1,9 @@
 import mattermost_client
 import Logger
 
-thGreenLow = [35,100,100]
-thGreenHigh = [86,255,255]
-sensitivity = 0.02
+thGreenLow = [25,52,72]
+thGreenHigh = [90,255,255]
+sensitivity = 0.01
 interval = 3
 
 def reactToCommands():
@@ -18,24 +18,27 @@ def reactToCommands():
         Logger.info("Reacting to command: " + command)
         
         if command == 'thGreenLow':
-            thGreenLow[0] = cmd['r']
-            thGreenLow[1] = cmd['g']
-            thGreenLow[2] = cmd['b']
+            thGreenLow[0] = cmd['h']
+            thGreenLow[1] = cmd['s']
+            thGreenLow[2] = cmd['v']
         elif command == 'thGreenHigh':
-            thGreenHigh[0] = cmd['r']
-            thGreenHigh[1] = cmd['g']
-            thGreenHigh[2] = cmd['b']
+            thGreenHigh[0] = cmd['h']
+            thGreenHigh[1] = cmd['s']
+            thGreenHigh[2] = cmd['v']
         elif command == 'sensitivity':
             sensitivity = cmd['value']
         elif command == 'getImage':
-            mattermost_client.postImage()
+            mattermost_client.postCroppedImage()
+        elif command == 'getRawImage':
+            mattermost_client.postRawImage()
         elif command == 'getIp':
             mattermost_client.postIP()
         elif command == 'updateInterval':
             interval = int(cmd['value'])
         elif command == 'getLog':
             mattermost_client.postLog()
-        
+        elif command == 'getScore':
+            mattermost_client.postScore()
     
 def getThGreenLow():
     global thGreenLow
