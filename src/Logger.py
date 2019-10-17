@@ -10,7 +10,6 @@ logger.addHandler(fileLogger)
 
 def info(msg):
     print(msg)
-    logger.info(msg)
     
 def error(msg):
     print(msg)
