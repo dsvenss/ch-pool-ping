@@ -1,8 +1,7 @@
+import CommandHandler
 from ImageComparator import ImageComparator
 from ImageHandler import ImageHandler
 from PoolTableFinder import PoolTableFinder
-import Logger
-import numpy
 
 class PoolTableChecker:
 
@@ -15,13 +14,18 @@ class PoolTableChecker:
         imageA = self.imageHandler.readImage(imagePathA)
         imageB = self.imageHandler.readImage(imagePathB)
 
-        tableABounds = self.tableFinder.getBoundingRectForTable(imageA)
-        tableBBounds = self.tableFinder.getBoundingRectForTable(imageB)
+        if CommandHandler.areBoundsSet():
+            bounds = CommandHandler.getBounds()
+            croppedA = self.imageHandler.cropAndRotateRectangleInImage(imageA, bounds)
+            croppedB = self.imageHandler.cropAndRotateRectangleInImage(imageB, bounds)
+        else:
+            tableABounds = self.tableFinder.getBoundingRectForTable(imageA)
+            tableBBounds = self.tableFinder.getBoundingRectForTable(imageB)
         
-        largestBounds = self.imageHandler.getLargestBoundingRect(tableABounds, tableBBounds)
+            largestBounds = self.imageHandler.getLargestBoundingRect(tableABounds, tableBBounds)
 
-        croppedA = self.imageHandler.cropImageByBoundingRect(imageA, largestBounds)
-        croppedB = self.imageHandler.cropImageByBoundingRect(imageB, largestBounds)
+            croppedA = self.imageHandler.cropImageByBoundingRect(imageA, largestBounds)
+            croppedB = self.imageHandler.cropImageByBoundingRect(imageB, largestBounds)
 
         return self.imageComparator.areImagesEqual(croppedA, croppedB)
 
