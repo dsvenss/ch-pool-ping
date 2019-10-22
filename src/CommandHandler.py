@@ -1,16 +1,19 @@
 import mattermost_client
 import Logger
+import SyncHandler
 
 thGreenLow = [25,52,72]
 thGreenHigh = [90,255,255]
 sensitivity = 0.01
 interval = 3
+runMain = True
 
 def reactToCommands():
     global thGreenLow
     global thGreenHigh
     global sensitivity
     global interval
+    global runMain
     
     commands = mattermost_client.getCommands()
     for cmd in commands:
@@ -39,6 +42,9 @@ def reactToCommands():
             mattermost_client.postLog()
         elif command == 'getScore':
             mattermost_client.postScore()
+        elif command == 'sync':
+            SyncHandler.syncSystem()
+            runMain = False
     
 def getThGreenLow():
     global thGreenLow
@@ -55,3 +61,8 @@ def getSensitivity():
 def getInterval():
     global interval
     return interval
+
+def getRunMain():
+    global runMain
+    return runMain
+    
