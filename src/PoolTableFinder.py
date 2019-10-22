@@ -19,8 +19,13 @@ class PoolTableFinder:
         Logger.info("Saving cropped image")
         
         currentImage = self.imageHandler.readImage(self.currentImagePath)
-        bounds = self.getBoundingRectForTable(currentImage)
-        croppedImage = self.imageHandler.cropImageByBoundingRect(currentImage, bounds)
+        if CommandHandler.areBoundsSet():
+            bounds = CommandHandler.getBounds()
+            croppedImage = self.imageHandler.cropAndRotateRectangleInImage(currentImage, bounds)
+        else:
+            bounds = self.getBoundingRectForTable(currentImage)
+            croppedImage = self.imageHandler.cropImageByBoundingRect(currentImage, bounds)
+
         cv.imwrite(self.croppedImagePath, croppedImage)
 
     def getMaskForTable(self, poolImage):
