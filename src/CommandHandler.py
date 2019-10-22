@@ -61,6 +61,9 @@ def reactToCommands():
                 [[int(cmd['c4x']), int(cmd['c4y'])]]
                 ])
 
+    mattermost_client.post("Command handled")
+
+
 def areBoundsSet():
     return len(bounds) > 0
 
