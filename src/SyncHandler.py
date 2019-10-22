@@ -16,14 +16,9 @@ def syncSystem():
     cmd = REPO_DIR + "/start.sh"
     subprocess.run([cmd])
     Logger.info("done new subprocess")
-    #returned_value = os.system(cmd)
-    ##Logger.info("returned_value: " + str(returned_value))
-   
 
 def pullGit():
     global REPO_DIR
     Logger.info("cloning git repo")
-    #Repo(REPO_DIR)
-    #distutils.dir_util.remove_tree(CLONED_REPO_DIR)
-    #Repo.pull_from(ConfigHandler.getGitRepo(), CLONED_REPO_DIR+ "/")
-    #distutils.dir_util.copy_tree(CLONED_REPO_DIR, "../")
+    repo = Repo(REPO_DIR).remotes.origin
+    repo.pull()
