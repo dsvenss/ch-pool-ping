@@ -2,6 +2,7 @@ import CommandHandler
 from ImageComparator import ImageComparator
 from ImageHandler import ImageHandler
 from PoolTableFinder import PoolTableFinder
+import cv2 as cv
 
 class PoolTableChecker:
 

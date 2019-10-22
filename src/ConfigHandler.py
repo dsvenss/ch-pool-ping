@@ -20,3 +20,6 @@ def getLogPath():
 
 def getCroppedImagePath():
     return 'croppedImage.jpg'
+
+def getGitRepo():
+    return "https://github.com/dsvenss/ch-pool-ping.git"

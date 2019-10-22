@@ -37,7 +37,9 @@ def checkAvailability():
     
     currentImage.rename(oldImagePath)
 
-while True:
+mattermost_client.post("Pool-ping is up and running")
+
+while CommandHandler.getRunMain():
     try:
         camera.takePicture()
         CommandHandler.reactToCommands()
@@ -45,3 +47,5 @@ while True:
     except Exception as e:
         Logger.exception(e)
     time.sleep(CommandHandler.getInterval())
+    
+mattermost_client.post("Pool-ping is shutdown")

@@ -24,7 +24,7 @@ class ImageHandler:
 
     def cropAndRotateRectangleInImage(self, img, bounds):
         rect = cv.minAreaRect(bounds)
-
+        
         # get the parameter of the small rectangle
         center, size, angle = rect[0], rect[1], rect[2]
         center, size = tuple(map(int, center)), tuple(map(int, size))
@@ -39,5 +39,5 @@ class ImageHandler:
 
         # now rotated rectangle becomes vertical and we crop it
         img_crop = cv.getRectSubPix(img_rot, size, center)
-
+        
         return img_crop
