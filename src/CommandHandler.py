@@ -5,9 +5,14 @@ import numpy
 
 thGreenLow = [25, 52, 72]
 thGreenHigh = [90, 255, 255]
-bounds = []
-sensitivity = 0.01
-interval = 3
+bounds = [
+    [[474, 566]],
+    [[839, 487]],
+    [[918, 984]],
+    [[1340, 792]]
+]
+sensitivity = 0.1
+interval = 30
 runMain = True
 
 def reactToCommands():
