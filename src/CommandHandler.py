@@ -23,6 +23,7 @@ def reactToCommands():
     global runMain
     global bounds
 
+    Logger.info("Getting commands")
     commands = mattermost_client.getCommands()
     for cmd in commands:
         command = cmd['command']
@@ -47,7 +48,8 @@ def reactToCommands():
         elif command == 'updateInterval':
             interval = int(cmd['value'])
         elif command == 'getLog':
-            mattermost_client.postLog()
+            log = Logger.getLog()
+            mattermost_client.postLog(log)
         elif command == 'getScore':
             mattermost_client.postScore()
         elif command == 'sync':

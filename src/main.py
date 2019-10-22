@@ -31,6 +31,7 @@ def checkAvailability():
             Logger.exception(e)
     
     if isAvailable != wasAvailable:
+        Logger.info('Posting availability: ' + str(isAvailable))
         mattermost_client.updateMattermostAvailable(isAvailable)
     
     wasAvailable = isAvailable

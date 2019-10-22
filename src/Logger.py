@@ -1,6 +1,7 @@
 import logging
 import ConfigHandler
 import os
+import mattermost_client as mattermost
 
 logger = logging.getLogger("pool-ping")
 fileLogger = logging.FileHandler(ConfigHandler.getLogPath())
@@ -13,11 +14,11 @@ def info(msg):
     
 def error(msg):
     print(msg)
-    logger.error(msg)
+    mattermost.postError(msg)
 
 def exception(e):
     print(e)
-    logger.error(str(e))
+    mattermost.postError(str(e))
     
 def getLog():
     try:
