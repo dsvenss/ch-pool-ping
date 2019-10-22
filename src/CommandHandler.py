@@ -32,7 +32,7 @@ def reactToCommands():
             thGreenHigh[1] = cmd['s']
             thGreenHigh[2] = cmd['v']
         elif command == 'sensitivity':
-            sensitivity = int(cmd['value'])
+            sensitivity = float(cmd['value'])
         elif command == 'getImage':
             mattermost_client.postCroppedImage()
         elif command == 'getRawImage':
