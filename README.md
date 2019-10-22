@@ -38,3 +38,5 @@ Virtual python environments
 # OpenCv and Intellij
 
 <https://medium.com/@aadimator/how-to-set-up-opencv-in-intellij-idea-6eb103c1d45c>
+
+I edit since Ninosan mad
