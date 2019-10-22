@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "82d6d05aec256bd81818f0b159f4a9027996756c4f3c07fdf1fc4cb9e0f2a0bd"
+            "sha256": "c038bc4beea0edadc41aac0f64c6a0240c4995c9f8e7e9a99113cdf66dd74f57"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -42,6 +42,21 @@
             ],
             "index": "pypi",
             "version": "==1.1.1"
+        },
+        "gitdb2": {
+            "hashes": [
+                "sha256:1b6df1433567a51a4a9c1a5a0de977aa351a405cc56d7d35f3388bad1f630350",
+                "sha256:96bbb507d765a7f51eb802554a9cfe194a174582f772e0d89f4e87288c288b7b"
+            ],
+            "version": "==2.0.6"
+        },
+        "gitpython": {
+            "hashes": [
+                "sha256:3237caca1139d0a7aa072f6735f5fd2520de52195e0fa1d8b83a9b212a2498b2",
+                "sha256:a7d6bef0775f66ba47f25911d285bcd692ce9053837ff48a120c2b8cf3a71389"
+            ],
+            "index": "pypi",
+            "version": "==3.0.4"
         },
         "imageio": {
             "hashes": [
@@ -357,6 +372,13 @@
                 "sha256:d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"
             ],
             "version": "==1.12.0"
+        },
+        "smmap2": {
+            "hashes": [
+                "sha256:0555a7bf4df71d1ef4218e4807bbf9b201f910174e6e08af2e138d4e517b4dde",
+                "sha256:29a9ffa0497e7f2be94ca0ed1ca1aa3cd4cf25a1f6b4f5f87f74b46ed91d609a"
+            ],
+            "version": "==2.0.5"
         },
         "websockets": {
             "hashes": [
