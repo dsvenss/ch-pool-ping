@@ -92,7 +92,10 @@ def parseCommands(cmd):
             commandList.append(actualCommand)
     
     return commandList
-    
+
+def postCurrentConfig(currentConfig):
+    msg = "# CURRENT CONFIGURATION\n" + currentConfig
+    post(msg)
     
 def postCroppedImage():
     

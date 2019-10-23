@@ -1,3 +1,4 @@
+from ScoreKeeper import ScoreKeeper
 import mattermost_client
 import Logger
 import SyncHandler
@@ -27,16 +28,17 @@ def reactToCommands():
     commands = mattermost_client.getCommands()
     for cmd in commands:
         command = cmd['command']
+        extraMsg = ''
         Logger.info("Reacting to command: " + command)
 
         if command == 'setThGreenLow':
-            thGreenLow[0] = cmd['h']
-            thGreenLow[1] = cmd['s']
-            thGreenLow[2] = cmd['v']
+            thGreenLow[0] = int(cmd['h'])
+            thGreenLow[1] = int(cmd['s'])
+            thGreenLow[2] = int(cmd['v'])
         elif command == 'setThGreenHigh':
-            thGreenHigh[0] = cmd['h']
-            thGreenHigh[1] = cmd['s']
-            thGreenHigh[2] = cmd['v']
+            thGreenHigh[0] = int(cmd['h'])
+            thGreenHigh[1] = int(cmd['s'])
+            thGreenHigh[2] = int(cmd['v'])
         elif command == 'setSensitivity':
             sensitivity = float(cmd['value'])
         elif command == 'getImage':
@@ -64,8 +66,27 @@ def reactToCommands():
                 [[int(cmd['c3x']), int(cmd['c3y'])]],
                 [[int(cmd['c4x']), int(cmd['c4y'])]]
                 ])
+        elif command == 'dumpConfig':
+            currentConfig = """
+Sensitivity: {sensitivity}
+Interval: {interval}
+ThGreenLow: {thGreenLow}
+ThGreenHigh: {thGreenHigh}
+Current score: {score}
+Bounds: {bounds}
+""".format(
+                sensitivity=str(sensitivity),
+                interval=str(interval),
+                thGreenLow=str(thGreenLow),
+                thGreenHigh=str(thGreenHigh),
+                score=str(ScoreKeeper.score),
+                bounds=str(bounds)
+            )
+            mattermost_client.postCurrentConfig(currentConfig)
+        else:
+            extraMsg = ' [UNKNOWN]'
 
-        mattermost_client.post("Command handled: " + command)
+        mattermost_client.post("Command handled: " + command + extraMsg)
 
 def areBoundsSet():
     return len(bounds) > 0
