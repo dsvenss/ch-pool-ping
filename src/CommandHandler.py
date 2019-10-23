@@ -12,7 +12,7 @@ bounds = numpy.array([
     [[1340, 792]]
 ])
 sensitivity = 0.1
-interval = 3
+interval = 30
 runMain = True
 
 def reactToCommands():
@@ -29,15 +29,15 @@ def reactToCommands():
         command = cmd['command']
         Logger.info("Reacting to command: " + command)
 
-        if command == 'thGreenLow':
+        if command == 'setThGreenLow':
             thGreenLow[0] = cmd['h']
             thGreenLow[1] = cmd['s']
             thGreenLow[2] = cmd['v']
-        elif command == 'thGreenHigh':
+        elif command == 'setThGreenHigh':
             thGreenHigh[0] = cmd['h']
             thGreenHigh[1] = cmd['s']
             thGreenHigh[2] = cmd['v']
-        elif command == 'sensitivity':
+        elif command == 'setSensitivity':
             sensitivity = float(cmd['value'])
         elif command == 'getImage':
             mattermost_client.postCroppedImage()
@@ -45,7 +45,7 @@ def reactToCommands():
             mattermost_client.postRawImage()
         elif command == 'getIp':
             mattermost_client.postIP()
-        elif command == 'updateInterval':
+        elif command == 'setInterval':
             interval = int(cmd['value'])
         elif command == 'getLog':
             log = Logger.getLog()
