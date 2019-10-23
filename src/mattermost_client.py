@@ -26,6 +26,20 @@ token = None
 
 latestEntry=None
 
+userId = None
+
+def getUserId():
+    global userId
+    if userId is None:
+        headers = getHeaders()
+        data={
+            'term': user,
+            'in_channel_id': mattermostCommandChannel
+        }
+        response = requests.post(mattermostApiUrl + "/users/search",json=data, headers=headers).json()
+        userId = response[0]['id']
+        
+    return userId
 
 def getHookPayloadBody(message, isAvailable):
     return {
@@ -133,6 +147,28 @@ def uploadImage(path):
     
     return response.json()
 
+def getPosts(page):
+    headers = getHeaders()
+    return requests.get(mattermostApiUrl + "/channels/" + mattermostCommandChannel + "/posts?page=" + str(page), headers=headers).json()
+
+def deletePost(post):
+    global userId
+    headers = getHeaders()
+    if post['user_id'] == userId:
+        requests.delete(mattermostApiUrl + "/posts/" + str(post['id']), headers=headers).json()
+
+def clearCommandChannelHistory(page):
+    getUserId()
+    postsResponse = getPosts(page)
+    order = postsResponse['order']
+    posts = postsResponse['posts']
+    
+    if len(order) > 0:
+        for pId in order:
+            p = posts[pId]
+            deletePost(p)
+        clearCommandChannelHistory(page + 1)
+    
 def getToken():
     global token
     global user

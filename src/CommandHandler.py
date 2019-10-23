@@ -12,7 +12,7 @@ bounds = numpy.array([
     [[1340, 792]]
 ])
 sensitivity = 0.1
-interval = 30
+interval = 3
 runMain = True
 
 def reactToCommands():
@@ -55,6 +55,8 @@ def reactToCommands():
         elif command == 'sync':
             SyncHandler.syncSystem()
             runMain = False
+        elif command == 'clearHistory':
+            mattermost_client.clearCommandChannelHistory(0)
         elif command == 'setBounds':
             bounds = numpy.array([
                 [[int(cmd['c1x']), int(cmd['c1y'])]],
