@@ -17,7 +17,8 @@ mattermostInfoChannel=mattermostConfig['infoChannel']
 
 headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
-iconUrl = "http://icons.iconarchive.com/icons/google/noto-emoji-activities/256/52758-pool-8-ball-icon.png"
+availableIconUrl = "https://previews.123rf.com/images/floralset/floralset1706/floralset170600119/80446026-billiard-green-pool-ball-with-number-6-snooker-transparent-background-vector-illustration-.jpg"
+busyIconUrl = "https://previews.123rf.com/images/floralset/floralset1706/floralset170600120/80446027-billiard-red-pool-ball-with-number-3-snooker-transparent-background-vector-illustration-.jpg"
 
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 
@@ -26,21 +27,21 @@ token = None
 latestEntry=None
 
 
-def getPayloadBody(message):
+def getHookPayloadBody(message, isAvailable):
     return {
         'channel': 'pool-ping',
         'username': 'pool-ping',
         'text': message,
-        'icon_url': iconUrl
+        'icon_url': availableIconUrl if isAvailable else busyIconUrl
         }
 
 def getHeaders():
     token = getToken()
     return {'Authorization': 'Bearer '+ token }
 
-def updateMattermostAvailable(available):
-    state = "LEDIGT" if available is True else "UPPTAGET"
-    data = getPayloadBody(state)
+def updateMattermostAvailable(isAvailable):
+    state = "LEDIGT" if isAvailable else "UPPTAGET"
+    data = getHookPayloadBody(state, isAvailable)
     requests.post(mattermostHookUrl, json=data, headers=headers)
     
 def readLatestEntry():
