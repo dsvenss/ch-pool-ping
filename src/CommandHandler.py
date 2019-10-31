@@ -96,7 +96,7 @@ Bounds: {bounds}
         else:
             extraMsg = ' [UNKNOWN]'
 
-        mattermost_client.post("Command handled: " + command + extraMsg)
+        mattermost_client.postToCommandChannel("Command handled: " + command + extraMsg)
 
 def areBoundsSet():
     return len(bounds) > 0
