@@ -9,8 +9,8 @@ from PoolTableFinder import PoolTableFinder
 mattermostConfig = ConfigHandler.getMattermostConfig()
 
 mattermostHookUrl = mattermostConfig['webhook']
-user = mattermostConfig['user']
-password = mattermostConfig['password']
+user = mattermostConfig['user2']
+password = mattermostConfig['password2']
 mattermostApiUrl = mattermostConfig['api']
 mattermostCommandChannel=mattermostConfig['commandChannel']
 mattermostInfoChannel=mattermostConfig['infoChannel']
