@@ -3,16 +3,17 @@ import mattermost_client
 import Logger
 import SyncHandler
 import numpy
+import ConfigHandler
 
 thGreenLow = [25, 52, 72]
 thGreenHigh = [90, 255, 255]
 bounds = numpy.array([
-    [[474, 566]],
-    [[839, 487]],
-    [[918, 984]],
-    [[1340, 792]]
+    [[690, 600]],
+    [[1030, 490]],
+    [[1460, 710]],
+    [[1030, 910]]
 ])
-sensitivity = 0.1
+sensitivity = 0.09
 interval = 30
 runMain = True
 
@@ -59,6 +60,15 @@ def reactToCommands():
             runMain = False
         elif command == 'clearHistory':
             mattermost_client.clearCommandChannelHistory(0)
+        elif command == 'setConfig':
+            key = str(cmd['key'])
+            value = str(cmd['value'])
+            ConfigHandler.setConfig(key, value)
+        elif command == 'getConfig':
+            key = str(cmd['key'])
+            config = ConfigHandler.getMattermostConfig()
+            value = config[key]
+            mattermost_client.postConfig(key, value)
         elif command == 'setBounds':
             bounds = numpy.array([
                 [[int(cmd['c1x']), int(cmd['c1y'])]],

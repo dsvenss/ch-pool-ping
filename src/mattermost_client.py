@@ -121,7 +121,11 @@ def postIP():
     ip = s.getsockname()[0]
 
     post(ip)
-    
+
+def postConfig(key, value):
+    msg = str(key) + " : " + str(value)
+    post(msg)
+
 def postScore():
     score = str(ScoreKeeper.score)
     post(score)

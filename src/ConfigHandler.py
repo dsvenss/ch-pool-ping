@@ -23,3 +23,9 @@ def getCroppedImagePath():
 
 def getGitRepo():
     return "https://github.com/dsvenss/ch-pool-ping.git"
+
+def setConfig(key, value):
+    config = getMattermostConfig()
+    config[key] = value
+    with open("../mattermostConfig.yml", "w") as outfile:
+        yaml.dump(config, outfile, default_flow_style=False)
