@@ -63,7 +63,6 @@ def getHeaders():
 def updateMattermostAvailable(isAvailable):
     state = "LEDIGT" if isAvailable else "UPPTAGET"
     data = getHookPayloadBody(state, isAvailable)
-    print('updateMattermostAvailable ' + str(data))
     requests.post(mattermostHookUrl, json=data)
 
 def readLatestEntry():
@@ -137,7 +136,6 @@ def postScore():
     postToCommandChannel(score)
 
 def postToCommandChannel(msg):
-    print('postToCommandChannel here')
     data = {'channel_id' : mattermostCommandChannel, 'message' : msg}
     POST(mattermostApiUrl + "/posts", data)
 
