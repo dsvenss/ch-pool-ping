@@ -28,22 +28,15 @@ latestEntry=None
 
 userId = None
 
-def GET(url):
-    headers = getHeaders()
-    return requests.get(url, headers=headers).json()
-
-def POST(url, data):
-    headers = getHeaders()
-    return requests.post(url, json=data, headers=headers).json()
-
 def getUserId():
     global userId
     if userId is None:
+        headers = getHeaders()
         data={
             'term': user,
             'in_channel_id': mattermostCommandChannel
         }
-        response = POST(mattermostApiUrl + "/users/search", data)
+        response = requests.post(mattermostApiUrl + "/users/search",json=data, headers=headers).json()
         userId = response[0]['id']
         
     return userId
@@ -63,11 +56,12 @@ def getHeaders():
 def updateMattermostAvailable(isAvailable):
     state = "LEDIGT" if isAvailable else "UPPTAGET"
     data = getHookPayloadBody(state, isAvailable)
-    POST(mattermostHookUrl, data)
+    requests.post(mattermostHookUrl, json=data, headers=headers)
     
 def readLatestEntry():
     global mattermostCommandChannel    
-    return GET(mattermostApiUrl + '/channels/'+mattermostCommandChannel+'/posts?per_page=1')
+    headers = getHeaders()
+    return requests.get(mattermostApiUrl + '/channels/'+mattermostCommandChannel+'/posts?per_page=1',  headers=headers).json()
 
 def getCommands():
     global latestEntry
@@ -101,7 +95,7 @@ def parseCommands(cmd):
 
 def postCurrentConfig(currentConfig):
     msg = "# CURRENT CONFIGURATION\n" + currentConfig
-    postToCommandChannel(msg)
+    post(msg)
     
 def postCroppedImage():
     
@@ -117,33 +111,36 @@ def postImage(path):
     response = uploadImage(path)
     imageId = getImageId(response)
 
+    headers = getHeaders()
     data = {'channel_id' : mattermostCommandChannel, 'message' : 'Pool table image', 'file_ids': [imageId]}
-    POST(mattermostApiUrl + "/posts", data)
+    requests.post(mattermostApiUrl + "/posts", json=data, headers=headers)
 
 def postIP():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(('8.8.8.8', 1))  # connect() for UDP doesn't send packets
     ip = s.getsockname()[0]
 
-    postToCommandChannel(ip)
+    post(ip)
 
 def postConfig(key, value):
     msg = str(key) + " : " + str(value)
-    postToCommandChannel(msg)
+    post(msg)
 
 def postScore():
     score = str(ScoreKeeper.score)
-    postToCommandChannel(score)
-
-def postToCommandChannel(msg):
+    post(score)
+    
+def post(msg):
+    headers = getHeaders()
     data = {'channel_id' : mattermostCommandChannel, 'message' : msg}
-    POST(mattermostApiUrl + "/posts", data)
+
+    requests.post(mattermostApiUrl + "/posts", json=data, headers=headers)
 
 def postError(msg):
-    postToCommandChannel(msg)
+    post(msg)
 
 def postLog(log):
-    postToCommandChannel(log)
+    post(log)
     
 def getImageId(response):
     return response['file_infos'][0]['id']
@@ -158,7 +155,8 @@ def uploadImage(path):
     return response.json()
 
 def getPosts(page):
-    return GET(mattermostApiUrl + "/channels/" + mattermostCommandChannel + "/posts?page=" + str(page))
+    headers = getHeaders()
+    return requests.get(mattermostApiUrl + "/channels/" + mattermostCommandChannel + "/posts?page=" + str(page), headers=headers).json()
 
 def deletePost(post):
     global userId
@@ -184,7 +182,7 @@ def getToken():
     global password
     if not token:
         data = {'login_id' : user, 'password': password}
-        response = POST(mattermostApiUrl + "/users/login", data)
+        response = requests.post(mattermostApiUrl + "/users/login", json=data)
         token = response.headers['Token']
     
     return token
