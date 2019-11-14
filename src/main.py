@@ -38,7 +38,7 @@ def checkAvailability():
     
     currentImage.rename(oldImagePath)
 
-mattermost_client.post("Pool-ping is up and running")
+mattermost_client.postToCommandChannel("Pool-ping is up and running")
 
 while CommandHandler.getRunMain():
     try:
@@ -50,4 +50,4 @@ while CommandHandler.getRunMain():
         Logger.exception(e)
     
     
-mattermost_client.post("Pool-ping is shutdown")
+mattermost_client.postToCommandChannel("Pool-ping is shutdown")
