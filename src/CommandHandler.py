@@ -13,7 +13,7 @@ bounds = numpy.array([
     [[1380, 740]],
     [[970, 960]]
 ])
-sensitivity = 0.09
+sensitivity = 0.1
 interval = 30
 runMain = True
 
