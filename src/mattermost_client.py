@@ -63,7 +63,8 @@ def getHeaders():
 def updateMattermostAvailable(isAvailable):
     state = "LEDIGT" if isAvailable else "UPPTAGET"
     data = getHookPayloadBody(state, isAvailable)
-    POST(mattermostHookUrl, data)
+    print('updateMattermostAvailable ' + str(data))
+    requests.post(mattermostHookUrl, json=data)
 
 def readLatestEntry():
     global mattermostCommandChannel
@@ -111,7 +112,7 @@ def postCroppedImage():
     postImage(ConfigHandler.getCroppedImagePath())
 
 def postRawImage():
-    postImage(ConfigHandler.getCurrentImagePath())
+    postImage(ConfigHandler.getRawImagePath())
 
 def postImage(path):
     response = uploadImage(path)
@@ -136,6 +137,7 @@ def postScore():
     postToCommandChannel(score)
 
 def postToCommandChannel(msg):
+    print('postToCommandChannel here')
     data = {'channel_id' : mattermostCommandChannel, 'message' : msg}
     POST(mattermostApiUrl + "/posts", data)
 

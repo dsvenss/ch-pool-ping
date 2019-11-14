@@ -12,13 +12,13 @@ class PoolTableFinder:
     
     def __init__(self):
         self.imageHandler = ImageHandler()
-        self.currentImagePath = ConfigHandler.getCurrentImagePath()
+        self.rawImagePath = ConfigHandler.getRawImagePath()
         self.croppedImagePath = ConfigHandler.getCroppedImagePath()
     
     def saveCroppedImage(self):
         Logger.info("Saving cropped image")
         
-        currentImage = self.imageHandler.readImage(self.currentImagePath)
+        currentImage = self.imageHandler.readImage(self.rawImagePath)
         if CommandHandler.areBoundsSet():
             bounds = CommandHandler.getBounds()
             croppedImage = self.imageHandler.cropAndRotateRectangleInImage(currentImage, bounds)

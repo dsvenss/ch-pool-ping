@@ -14,7 +14,7 @@ bounds = numpy.array([
     [[1030, 910]]
 ])
 sensitivity = 0.09
-interval = 30
+interval = 3
 runMain = True
 
 def reactToCommands():

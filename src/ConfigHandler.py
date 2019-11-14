@@ -15,6 +15,9 @@ def getCurrentImagePath():
 def getOldImagePath():
     return 'old.jpg'
 
+def getRawImagePath():
+    return 'rawImage.jpg'
+
 def getLogPath():
     return 'pool-ping.log'
 

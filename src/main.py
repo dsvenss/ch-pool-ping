@@ -5,6 +5,7 @@ import ConfigHandler
 import camera
 import time
 from pathlib import Path
+from shutil import copyfile
 import Logger
 from ScoreKeeper import ScoreKeeper
 
@@ -35,7 +36,7 @@ def checkAvailability():
         mattermost_client.updateMattermostAvailable(isAvailable)
     
     wasAvailable = isAvailable
-    
+    copyfile(currentImagePath, ConfigHandler.getRawImagePath())
     currentImage.rename(oldImagePath)
 
 mattermost_client.postToCommandChannel("Pool-ping is up and running")
