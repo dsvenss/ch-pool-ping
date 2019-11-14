@@ -8,10 +8,10 @@ import ConfigHandler
 thGreenLow = [25, 52, 72]
 thGreenHigh = [90, 255, 255]
 bounds = numpy.array([
-    [[690, 600]],
-    [[1030, 490]],
-    [[1460, 710]],
-    [[1030, 910]]
+    [[520, 590]],
+    [[850, 490]],
+    [[1380, 740]],
+    [[970, 960]]
 ])
 sensitivity = 0.09
 interval = 30
