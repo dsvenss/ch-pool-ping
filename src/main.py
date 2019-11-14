@@ -42,11 +42,12 @@ mattermost_client.post("Pool-ping is up and running")
 
 while CommandHandler.getRunMain():
     try:
+        time.sleep(CommandHandler.getInterval())
         camera.takePicture()
-        CommandHandler.reactToCommands()
         checkAvailability()
+        CommandHandler.reactToCommands()
     except Exception as e:
         Logger.exception(e)
-    time.sleep(CommandHandler.getInterval())
+    
     
 mattermost_client.post("Pool-ping is shutdown")

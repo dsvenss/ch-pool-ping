@@ -1,5 +1,4 @@
 from git import Repo
-import ConfigHandler
 import Logger
 import os
 import distutils.dir_util
